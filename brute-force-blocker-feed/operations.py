@@ -23,14 +23,10 @@ errors = {
     500: 'Internal Server Error'
 }
 
-SERVICE = {
-    "BruteForceBlocker IPs Blocklist": "https://danger.rulez.sk/projects/bruteforceblocker/blist.php"
-}
-
 
 class BruteForceBlockerFeed(object):
     def __init__(self, config, *args, **kwargs):
-        self.url = SERVICE.get(config.get('service'))
+        self.url = config.get('service')
         self.sslVerify = config.get('verify_ssl')
 
     def make_rest_call(self, url, method):
@@ -67,32 +63,43 @@ def convert_datetime_to_epoch(date_time):
     return epoch
 
 
+def find_indicators(ip_blocklist, last_modified_datetime):
+    ip_blocklist_list = []
+    for ip in ip_blocklist[5:-1]:
+        ip_type = ip.replace("\\t", " ")
+        ip = ip_type.split(" ")
+        reported_date_time = ip[3] + 'T' + ip[4] + '.000Z'
+        ip_blocklist_list.append(
+            {'ip': ip[0], 'last_reported': int(convert_datetime_to_epoch(reported_date_time)),
+             'last_modified': int(last_modified_datetime), 'expires': int(last_modified_datetime) + 300,
+             'count': int(ip[6]),
+             'id': int(ip[7])})
+    return ip_blocklist_list
+
+
 def fetch_indicators(config, params, **kwargs):
     sf = BruteForceBlockerFeed(config)
     endpoint = ""
-    ip_blocklist_list = []
+    last_pull_time = params.get('last_pull_time')
     response = sf.make_rest_call(endpoint, 'GET')
     if response:
         ip_blocklist = str(response).split("\\n")
         last_modified_datetime = ip_blocklist[0].replace("\\t", " ").split(" ")[5].split(":")[1]
-        for ip in ip_blocklist[5:-1]:
-            ip_type = ip.replace("\\t", " ")
-            ip = ip_type.split(" ")
-            reported_date_time = ip[3] + 'T' + ip[4] + '.000Z'
-            ip_blocklist_list.append(
-                {'ip': ip[0], 'last_reported': int(convert_datetime_to_epoch(reported_date_time)),
-                 'last_modified': int(last_modified_datetime), 'expires': int(last_modified_datetime) + 300,
-                 'count': int(ip[6]),
-                 'id': int(ip[7])})
-        return ip_blocklist_list
+        if last_pull_time:
+            last_pull_time = int(convert_datetime_to_epoch(last_pull_time))
+            if int(last_modified_datetime) > last_pull_time:
+                ips_list = find_indicators(ip_blocklist, last_modified_datetime)
+                return ips_list
+            else:
+                return []
+        else:
+            ips_list = find_indicators(ip_blocklist, last_modified_datetime)
+            return ips_list
 
 
 def _check_health(config):
-    try:
-        sf = BruteForceBlockerFeed(config)
-        return True
-    except Exception as err:
-        raise ConnectorError('Invalid URL or Credentials')
+    sf = BruteForceBlockerFeed(config)
+    return True
 
 
 operations = {

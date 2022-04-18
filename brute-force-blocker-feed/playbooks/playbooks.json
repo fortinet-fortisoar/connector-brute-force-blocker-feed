@@ -6,13 +6,13 @@
       "name": "Sample - BruteForceBlocker Feed - 1.0.0",
       "description": "Sample playbooks for \"BruteForceBlocker Feed\" connector. If you are planning to use any of the sample playbooks in your environment, ensure that you clone those playbooks and move them to a different collection, since the sample playbook collection gets deleted during connector upgrade and delete.",
       "visible": true,
-      "image": "/api/3/images/6da48511-f756-4b62-bc09-d4470d9854b8",
+      "image": "/api/3/images/f2a410df-1a78-416d-8083-77dc88726ab3",
       "uuid": "e4a12c3d-dc27-4844-a279-a61ac2e5e601",
-      "id": 129,
+      "id": 137,
       "createUser": "/api/3/appliances/57545210-2adc-472b-a24f-2df6ee8dfe63",
-      "createDate": 1649782875.103708,
+      "createDate": 1650261439.885442,
       "modifyUser": "/api/3/appliances/57545210-2adc-472b-a24f-2df6ee8dfe63",
-      "modifyDate": 1649782875.103708,
+      "modifyDate": 1650261439.885442,
       "recordTags": [],
       "deletedAt": null,
       "workflows": [
@@ -21,50 +21,19 @@
           "triggerLimit": null,
           "name": "BruteForceBlocker Feed > Ingest",
           "aliasName": null,
-          "tag": "#brute-force-blocker-feed #dataingestion #ingest #create",
+          "tag": null,
           "description": "Fetch Indicators from BruteForceBlocker Feed",
           "isActive": false,
-          "debug": true,
+          "debug": false,
           "singleRecordExecution": false,
           "remoteExecutableFlag": false,
           "parameters": [],
           "synchronous": false,
-          "lastModifyDate": 1649783246,
+          "lastModifyDate": 1650264207,
           "collection": "/api/3/workflow_collections/e4a12c3d-dc27-4844-a279-a61ac2e5e601",
           "versions": [],
           "triggerStep": "/api/3/workflow_steps/6d870b58-2658-45f0-a47a-58ba84b4d008",
           "steps": [
-            {
-              "@type": "WorkflowStep",
-              "name": "Start",
-              "description": null,
-              "arguments": {
-                "step_variables": {
-                  "input": {
-                    "params": []
-                  }
-                }
-              },
-              "status": null,
-              "top": "30",
-              "left": "125",
-              "stepType": "/api/3/workflow_step_types/b348f017-9a94-471f-87f8-ce88b6a7ad62",
-              "uuid": "6d870b58-2658-45f0-a47a-58ba84b4d008"
-            },
-            {
-              "@type": "WorkflowStep",
-              "name": "Configuration",
-              "description": null,
-              "arguments": {
-                "fetchTime": "{{arrow.get( arrow.utcnow().timestamp).strftime('%Y-%m-%dT%H:%M:%S.%fZ')}}",
-                "pullTimeMacro": "BruteForceBlockerFeedLastPullTime_{{vars['audit_info']['cyops_playbook_iri'].split('/')[-1].replace('-','_')}}"
-              },
-              "status": null,
-              "top": "165",
-              "left": "125",
-              "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
-              "uuid": "57d6e6d6-e381-42fe-801e-e108c9193b12"
-            },
             {
               "@type": "WorkflowStep",
               "name": "Get Macro Value",
@@ -89,6 +58,37 @@
             },
             {
               "@type": "WorkflowStep",
+              "name": "Configuration",
+              "description": null,
+              "arguments": {
+                "fetchTime": "{{arrow.get( arrow.utcnow().timestamp).strftime('%Y-%m-%dT%H:%M:%S.%fZ')}}",
+                "pullTimeMacro": "BruteForceBlockerFeedLastPullTime_{{vars['audit_info']['cyops_playbook_iri'].split('/')[-1].replace('-','_')}}"
+              },
+              "status": null,
+              "top": "165",
+              "left": "125",
+              "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+              "uuid": "57d6e6d6-e381-42fe-801e-e108c9193b12"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Start",
+              "description": null,
+              "arguments": {
+                "step_variables": {
+                  "input": {
+                    "params": []
+                  }
+                }
+              },
+              "status": null,
+              "top": "30",
+              "left": "125",
+              "stepType": "/api/3/workflow_step_types/b348f017-9a94-471f-87f8-ce88b6a7ad62",
+              "uuid": "6d870b58-2658-45f0-a47a-58ba84b4d008"
+            },
+            {
+              "@type": "WorkflowStep",
               "name": "Extract Value from Response",
               "description": null,
               "arguments": {
@@ -99,24 +99,6 @@
               "left": "125",
               "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
               "uuid": "7ee9f7dd-9154-49a2-b387-c3a6355edb1e"
-            },
-            {
-              "@type": "WorkflowStep",
-              "name": "Fetch Indicators",
-              "description": null,
-              "arguments": {
-                "arguments": {
-                  "lastPullTime": "{{vars.lastPullTime}}"
-                },
-                "apply_async": false,
-                "step_variables": [],
-                "workflowReference": "/api/3/workflows/90edc3fd-fdcb-4027-aa94-ce504c8783ac"
-              },
-              "status": null,
-              "top": "570",
-              "left": "125",
-              "stepType": "/api/3/workflow_step_types/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
-              "uuid": "df6903e6-7e4b-4f22-9de2-1ceba4be419b"
             },
             {
               "@type": "WorkflowStep",
@@ -138,6 +120,24 @@
               "left": "125",
               "stepType": "/api/3/workflow_step_types/0109f35d-090b-4a2b-bd8a-94cbc3508562",
               "uuid": "b82ef02b-c9b0-447d-82c6-ab5728d725be"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Fetch Indicators",
+              "description": null,
+              "arguments": {
+                "arguments": {
+                  "lastPullTime": "{{vars.lastPullTime}}"
+                },
+                "apply_async": false,
+                "step_variables": [],
+                "workflowReference": "/api/3/workflows/90edc3fd-fdcb-4027-aa94-ce504c8783ac"
+              },
+              "status": null,
+              "top": "570",
+              "left": "125",
+              "stepType": "/api/3/workflow_step_types/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
+              "uuid": "df6903e6-7e4b-4f22-9de2-1ceba4be419b"
             }
           ],
           "routes": [
@@ -194,11 +194,11 @@
             "ingest",
             "brute-force-blocker-feed"
           ],
-          "id": "1128",
+          "id": "1163",
           "createUser": "/api/3/appliances/57545210-2adc-472b-a24f-2df6ee8dfe63",
-          "createDate": 1649782875.104702,
+          "createDate": 1650261439.887274,
           "modifyUser": "/api/3/people/3451141c-bac6-467c-8d72-85e0fab569ce",
-          "modifyDate": 1649783246.284988,
+          "modifyDate": 1650264206.704139,
           "owners": [],
           "isPrivate": false,
           "deletedAt": null
@@ -208,10 +208,10 @@
           "triggerLimit": null,
           "name": "Fetch Indicators",
           "aliasName": null,
-          "tag": "#brute-force-blocker-feed",
+          "tag": null,
           "description": "Retrieves a list of all indicators from BruteForceBlocker Feed.",
           "isActive": false,
-          "debug": true,
+          "debug": false,
           "singleRecordExecution": false,
           "remoteExecutableFlag": false,
           "parameters": [],
@@ -288,11 +288,11 @@
           "recordTags": [
             "brute-force-blocker-feed"
           ],
-          "id": "1143",
-          "createUser": "/api/3/people/3451141c-bac6-467c-8d72-85e0fab569ce",
-          "createDate": 1649830468.497819,
-          "modifyUser": "/api/3/people/3451141c-bac6-467c-8d72-85e0fab569ce",
-          "modifyDate": 1649830532.123295,
+          "id": "1164",
+          "createUser": "/api/3/appliances/57545210-2adc-472b-a24f-2df6ee8dfe63",
+          "createDate": 1650261439.888497,
+          "modifyUser": "/api/3/appliances/57545210-2adc-472b-a24f-2df6ee8dfe63",
+          "modifyDate": 1650261439.888497,
           "owners": [],
           "isPrivate": false,
           "deletedAt": null
@@ -302,21 +302,87 @@
           "triggerLimit": null,
           "name": "> BruteForceBlocker Feed > Fetch and Create",
           "aliasName": null,
-          "tag": "#brute-force-blocker-feed #dataingestion #fetch",
+          "tag": null,
           "description": "Create Indicators from BruteForceBlocker Feed",
           "isActive": false,
-          "debug": true,
+          "debug": false,
           "singleRecordExecution": false,
           "remoteExecutableFlag": false,
           "parameters": [
             "lastPullTime"
           ],
           "synchronous": false,
-          "lastModifyDate": 1649828178,
+          "lastModifyDate": 1650264196,
           "collection": "/api/3/workflow_collections/e4a12c3d-dc27-4844-a279-a61ac2e5e601",
           "versions": [],
           "triggerStep": "/api/3/workflow_steps/73ca9ce9-2175-4a73-aeb5-616d5aba4096",
           "steps": [
+            {
+              "@type": "WorkflowStep",
+              "name": "Save Result",
+              "description": null,
+              "arguments": {
+                "currentPullTime": "{{vars.currentPullTime}}"
+              },
+              "status": null,
+              "top": "975",
+              "left": "475",
+              "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+              "uuid": "1b83f57e-368a-44ee-8c7f-221668d5ae4c"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Is data only for mapping",
+              "description": null,
+              "arguments": {
+                "conditions": [
+                  {
+                    "option": "Yes, For Mapping",
+                    "step_iri": "/api/3/workflow_steps/724c0946-34ff-42c3-b868-38f9c134185a",
+                    "condition": "{{ vars.request.env_setup == true }}",
+                    "step_name": "Return Sample Data"
+                  },
+                  {
+                    "option": "No, For Ingestion",
+                    "default": true,
+                    "step_iri": "/api/3/workflow_steps/80ceceef-d99b-4a9c-ac04-4365ff554d06",
+                    "step_name": "Fetch Indicators"
+                  }
+                ]
+              },
+              "status": null,
+              "top": "435",
+              "left": "300",
+              "stepType": "/api/3/workflow_step_types/12254cf5-5db7-4b1a-8cb1-3af081924b28",
+              "uuid": "3b7eaf07-64f5-47c6-90a0-4ce9ecac1759"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Resolve Range",
+              "description": null,
+              "arguments": {
+                "tlp_resolved": "{{vars.tlp | resolveRange(vars.tlp_map)}}",
+                "reputation_resolved": "{{vars.reputation | resolveRange(vars.reputation_map)}}"
+              },
+              "status": null,
+              "top": "300",
+              "left": "300",
+              "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+              "uuid": "71dbae1c-ed21-4369-8ec2-01329a02fe16"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Return Sample Data",
+              "description": null,
+              "arguments": {
+                "data": "[\n   {\n      \"ip\":\"179.43.154.138\",\n      \"last_reported\":1649708260,\n      \"last_modified\":1649779038,\n      \"expires\":1649779338,\n      \"count\":24,\n      \"id\":2463912\n   },\n   {\n      \"ip\":\"179.43.154.137\",\n      \"last_reported\":1649756834,\n      \"last_modified\":1649779038,\n      \"expires\":1649779338,\n      \"count\":23,\n      \"id\":2463955\n   },\n   {\n      \"ip\":\"45.125.65.31\",\n      \"last_reported\":1649358920,\n      \"last_modified\":1649779038,\n      \"expires\":1649779338,\n      \"count\":23,\n      \"id\":2465378\n   },\n   {\n      \"ip\":\"179.43.167.74\",\n      \"last_reported\":1648835069,\n      \"last_modified\":1649779038,\n      \"expires\":1649779338,\n      \"count\":23,\n      \"id\":2464731\n   },\n   {\n      \"ip\":\"222.186.19.207\",\n      \"last_reported\":1647327404,\n      \"last_modified\":1649779038,\n      \"expires\":1649779338,\n      \"count\":23,\n      \"id\":2460384\n   }\n]"
+              },
+              "status": null,
+              "top": "570",
+              "left": "125",
+              "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+              "uuid": "724c0946-34ff-42c3-b868-38f9c134185a"
+            },
             {
               "@type": "WorkflowStep",
               "name": "Start",
@@ -335,104 +401,6 @@
               "left": "300",
               "stepType": "/api/3/workflow_step_types/b348f017-9a94-471f-87f8-ce88b6a7ad62",
               "uuid": "73ca9ce9-2175-4a73-aeb5-616d5aba4096"
-            },
-            {
-              "@type": "WorkflowStep",
-              "name": "Configuration",
-              "description": null,
-              "arguments": {
-                "tlp": "White",
-                "tlp_map": "{'Red': {{'TrafficLightProtocol'| picklist('Red') }}, 'Amber': {{'TrafficLightProtocol'| picklist('Amber') }}, 'Green': {{'TrafficLightProtocol'| picklist('Green') }}, 'White': {{'TrafficLightProtocol'| picklist('White') }}}",
-                "confidence": "50",
-                "reputation": "Suspicious",
-                "output_mode": "Return as a JSON",
-                "reputation_map": "{'Good': {{'IndicatorReputation'| picklist('Good') }}, 'Malicious': {{'IndicatorReputation'| picklist('Malicious') }}, 'Suspicious': {{'IndicatorReputation'| picklist('Suspicious') }}, 'TBD': {{'IndicatorReputation'| picklist('TBD') }}, 'No Reputation Available': {{'IndicatorReputation' | picklist('No Reputation Available') }}}",
-                "currentPullTime": "{{arrow.get((arrow.utcnow().int_timestamp | int | abs)).format('YYYY-MM-DDTHH:mm:ss.SSS')+'Z'}}",
-                "threat_intel_feeds_tLP_map": "{}",
-                "threat_intel_feeds_reputation_map": "{}",
-                "threat_intel_feeds_typeOfFeed_map": "{}"
-              },
-              "status": null,
-              "top": "165",
-              "left": "300",
-              "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
-              "uuid": "8c1e9d75-7f09-4f4e-8a53-49fe8670d9f3"
-            },
-            {
-              "@type": "WorkflowStep",
-              "name": "Resolve Range",
-              "description": null,
-              "arguments": {
-                "tlp_resolved": "{{vars.tlp | resolveRange(vars.tlp_map)}}",
-                "reputation_resolved": "{{vars.reputation | resolveRange(vars.reputation_map)}}"
-              },
-              "status": null,
-              "top": "300",
-              "left": "300",
-              "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
-              "uuid": "71dbae1c-ed21-4369-8ec2-01329a02fe16"
-            },
-            {
-              "@type": "WorkflowStep",
-              "name": "Is data only for mapping",
-              "description": null,
-              "arguments": {
-                "conditions": [
-                  {
-                    "option": "Yes, For Mapping",
-                    "step_iri": "/api/3/workflow_steps/724c0946-34ff-42c3-b868-38f9c134185a",
-                    "condition": "{{ vars.request.env_setup == true }}",
-                    "step_name": "Return Sample Data"
-                  },
-                  {
-                    "option": "No, For Ingestion",
-                    "default": true,
-                    "step_iri": "/api/3/workflow_steps/e8ea7ccf-41b0-464b-a65d-c437c67ba79f",
-                    "step_name": "Fetch Indicators"
-                  }
-                ]
-              },
-              "status": null,
-              "top": "435",
-              "left": "300",
-              "stepType": "/api/3/workflow_step_types/12254cf5-5db7-4b1a-8cb1-3af081924b28",
-              "uuid": "3b7eaf07-64f5-47c6-90a0-4ce9ecac1759"
-            },
-            {
-              "@type": "WorkflowStep",
-              "name": "Return Sample Data",
-              "description": null,
-              "arguments": {
-                "data": "[\n   {\n      \"ip\":\"179.43.154.138\",\n      \"last_reported\":1649708260,\n      \"last_modified\":1649779038,\n      \"expires\":1649779338,\n      \"count\":24,\n      \"id\":2463912\n   },\n   {\n      \"ip\":\"179.43.154.137\",\n      \"last_reported\":1649756834,\n      \"last_modified\":1649779038,\n      \"expires\":1649779338,\n      \"count\":23,\n      \"id\":2463955\n   },\n   {\n      \"ip\":\"45.125.65.31\",\n      \"last_reported\":1649358920,\n      \"last_modified\":1649779038,\n      \"expires\":1649779338,\n      \"count\":23,\n      \"id\":2465378\n   },\n   {\n      \"ip\":\"179.43.167.74\",\n      \"last_reported\":1648835069,\n      \"last_modified\":1649779038,\n      \"expires\":1649779338,\n      \"count\":23,\n      \"id\":2464731\n   },\n   {\n      \"ip\":\"222.186.19.207\",\n      \"last_reported\":1647327404,\n      \"last_modified\":1649779038,\n      \"expires\":1649779338,\n      \"count\":23,\n      \"id\":2460384\n   }\n]"
-              },
-              "status": null,
-              "top": "570",
-              "left": "125",
-              "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
-              "uuid": "724c0946-34ff-42c3-b868-38f9c134185a"
-            },
-            {
-              "@type": "WorkflowStep",
-              "name": "Fetch Indicators",
-              "description": null,
-              "arguments": {
-                "name": "BruteForceBlocker Feed",
-                "config": "",
-                "params": {
-                  "output_mode": "Return as a JSON"
-                },
-                "version": "1.0.0",
-                "connector": "brute-force-blocker-feed",
-                "operation": "fetch_indicators",
-                "operationTitle": "Fetch Indicators",
-                "pickFromTenant": false,
-                "step_variables": []
-              },
-              "status": null,
-              "top": "570",
-              "left": "475",
-              "stepType": "/api/3/workflow_step_types/0bfed618-0316-11e7-93ae-92361f002671",
-              "uuid": "e8ea7ccf-41b0-464b-a65d-c437c67ba79f"
             },
             {
               "@type": "WorkflowStep",
@@ -472,7 +440,7 @@
                   "reputation": "{% if vars.reputation %}{{ vars.reputation | resolveRange(vars.reputation_map)}}{% endif %}",
                   "sourceData": "{{vars.item | toJSON}}",
                   "typeOfFeed": "/api/3/picklists/b788efc2-dadb-4448-9018-043b37266de4",
-                  "validUntil": "{{vars.item.last_reported}}"
+                  "validUntil": "{{vars.item.expires}}"
                 },
                 "_showJson": false,
                 "operation": "Overwrite",
@@ -491,19 +459,69 @@
             },
             {
               "@type": "WorkflowStep",
-              "name": "Save Result",
+              "name": "Fetch Indicators",
               "description": null,
               "arguments": {
-                "currentPullTime": "{{vars.currentPullTime}}"
+                "name": "BruteForceBlocker Feed",
+                "config": "",
+                "params": {
+                  "last_pull_time": "{{vars.input.params.lastPullTime}}"
+                },
+                "version": "1.0.0",
+                "connector": "brute-force-blocker-feed",
+                "operation": "fetch_indicators",
+                "operationTitle": "Fetch Indicators",
+                "pickFromTenant": false,
+                "step_variables": []
               },
               "status": null,
-              "top": "975",
+              "top": "570",
               "left": "475",
+              "stepType": "/api/3/workflow_step_types/0bfed618-0316-11e7-93ae-92361f002671",
+              "uuid": "80ceceef-d99b-4a9c-ac04-4365ff554d06"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Configuration",
+              "description": null,
+              "arguments": {
+                "tlp": "White",
+                "tlp_map": "{'Red': {{'TrafficLightProtocol'| picklist('Red') }}, 'Amber': {{'TrafficLightProtocol'| picklist('Amber') }}, 'Green': {{'TrafficLightProtocol'| picklist('Green') }}, 'White': {{'TrafficLightProtocol'| picklist('White') }}}",
+                "confidence": "50",
+                "reputation": "Suspicious",
+                "output_mode": "Return as a JSON",
+                "reputation_map": "{'Good': {{'IndicatorReputation'| picklist('Good') }}, 'Malicious': {{'IndicatorReputation'| picklist('Malicious') }}, 'Suspicious': {{'IndicatorReputation'| picklist('Suspicious') }}, 'TBD': {{'IndicatorReputation'| picklist('TBD') }}, 'No Reputation Available': {{'IndicatorReputation' | picklist('No Reputation Available') }}}",
+                "currentPullTime": "{{arrow.get((arrow.utcnow().int_timestamp | int | abs)).format('YYYY-MM-DDTHH:mm:ss.SSS')+'Z'}}",
+                "threat_intel_feeds_tLP_map": "{}",
+                "threat_intel_feeds_reputation_map": "{}",
+                "threat_intel_feeds_typeOfFeed_map": "{}"
+              },
+              "status": null,
+              "top": "165",
+              "left": "300",
               "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
-              "uuid": "1b83f57e-368a-44ee-8c7f-221668d5ae4c"
+              "uuid": "8c1e9d75-7f09-4f4e-8a53-49fe8670d9f3"
             }
           ],
           "routes": [
+            {
+              "@type": "WorkflowRoute",
+              "name": "Fetch Indicators -> Create Feed List",
+              "targetStep": "/api/3/workflow_steps/77b012c3-d74f-4c01-882b-f86615ee8d6c",
+              "sourceStep": "/api/3/workflow_steps/80ceceef-d99b-4a9c-ac04-4365ff554d06",
+              "label": null,
+              "isExecuted": false,
+              "uuid": "388f1a00-b2ec-4cce-ba99-1f533d5e2482"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Is data only for mapping -> Fetch Indicators",
+              "targetStep": "/api/3/workflow_steps/80ceceef-d99b-4a9c-ac04-4365ff554d06",
+              "sourceStep": "/api/3/workflow_steps/3b7eaf07-64f5-47c6-90a0-4ce9ecac1759",
+              "label": "No, For Ingestion",
+              "isExecuted": false,
+              "uuid": "bb60af02-24d1-478f-a575-245fdccee8be"
+            },
             {
               "@type": "WorkflowRoute",
               "name": "Is data only for mapping -> Return Sample Data",
@@ -521,15 +539,6 @@
               "label": null,
               "isExecuted": false,
               "uuid": "2757dee1-2d8d-42c0-bbed-cdff137d77b6"
-            },
-            {
-              "@type": "WorkflowRoute",
-              "name": "Is data only for mapping -> Fetch Indicators",
-              "targetStep": "/api/3/workflow_steps/e8ea7ccf-41b0-464b-a65d-c437c67ba79f",
-              "sourceStep": "/api/3/workflow_steps/3b7eaf07-64f5-47c6-90a0-4ce9ecac1759",
-              "label": "No, For Ingestion",
-              "isExecuted": false,
-              "uuid": "397a0a7a-9b07-4239-a634-4230428fd1a8"
             },
             {
               "@type": "WorkflowRoute",
@@ -566,15 +575,6 @@
               "label": null,
               "isExecuted": false,
               "uuid": "7ca13dcd-ec68-416e-b207-a87ad882eb78"
-            },
-            {
-              "@type": "WorkflowRoute",
-              "name": "Fetch Indicators -> Create Feed List",
-              "targetStep": "/api/3/workflow_steps/77b012c3-d74f-4c01-882b-f86615ee8d6c",
-              "sourceStep": "/api/3/workflow_steps/e8ea7ccf-41b0-464b-a65d-c437c67ba79f",
-              "label": null,
-              "isExecuted": false,
-              "uuid": "863810b0-3426-4866-b8d7-6f2a7ed87c73"
             }
           ],
           "priority": "/api/3/picklists/2b563c61-ae2c-41c0-a85a-c9709585e3f2",
@@ -585,11 +585,11 @@
             "fetch",
             "brute-force-blocker-feed"
           ],
-          "id": "1129",
+          "id": "1165",
           "createUser": "/api/3/appliances/57545210-2adc-472b-a24f-2df6ee8dfe63",
-          "createDate": 1649782875.10535,
+          "createDate": 1650261439.889266,
           "modifyUser": "/api/3/people/3451141c-bac6-467c-8d72-85e0fab569ce",
-          "modifyDate": 1649828177.781399,
+          "modifyDate": 1650264196.426157,
           "owners": [],
           "isPrivate": false,
           "deletedAt": null
