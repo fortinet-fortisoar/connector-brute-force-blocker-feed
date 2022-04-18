@@ -7,12 +7,6 @@
 import requests, datetime, time
 from connectors.core.connector import get_logger, ConnectorError
 
-try:
-    from integrations.crudhub import trigger_ingest_playbook
-except:
-    # ignore. lower FSR version
-    pass
-
 logger = get_logger('brute-force-blocker-feed')
 
 errors = {
