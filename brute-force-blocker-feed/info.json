@@ -1,0 +1,83 @@
+{
+  "name": "brute-force-blocker-feed",
+  "version": "1.0.0",
+  "label": "BruteForceBlocker Feed",
+  "category": "Threat Intelligence",
+  "description": "BruteForceBlocker Feed it's main purpose is to block SSH bruteforce attacks via firewall.This connector facilitates automated operations related to fetching the list of IPs blocklist.<br/><br/>This connector has a dependency on the <a href=\"/content-hub/all-content/?contentType=solutionpack&amp;tag=ThreatIntelManagement\" target=\"_blank\" rel=\"noopener\">Threat Intel Management Solution Pack</a>. Install the Solution Pack before enabling ingestion of Threat Feeds from this source.",
+  "publisher": "Fortinet",
+  "cs_approved": true,
+  "cs_compatible": true,
+  "help_online": "",
+  "icon_small_name": "small.png",
+  "icon_large_name": "large.png",
+  "tags": [
+    "ThreatIntel"
+  ],
+  "ingestion_supported": true,
+  "ingestion_modes": [
+    "scheduled"
+  ],
+  "ingestion_preferences": {
+    "modules": [
+      "threat_intel_feeds",
+      "indicators"
+    ]
+  },
+  "configuration": {
+    "fields": [
+      {
+        "title": "Service",
+        "name": "service",
+        "description": "Review and select the URL of the BruteForceBlocker Feed service to which you will connect and retrieve data. You can choose https://danger.rulez.sk/projects/bruteforceblocker/blist.php.",
+        "type": "text",
+        "visible": true,
+        "editable": true,
+        "required": true,
+        "value": "https://danger.rulez.sk/projects/bruteforceblocker/blist.php"
+      },
+      {
+        "title": "Verify SSL",
+        "name": "verify_ssl",
+        "description": "Specifies whether the SSL certificate for the server is to be verified or not.",
+        "type": "checkbox",
+        "required": false,
+        "editable": true,
+        "visible": true,
+        "value": true
+      }
+    ]
+  },
+  "operations": [
+    {
+      "operation": "fetch_indicators",
+      "category": "investigation",
+      "annotation": "fetch_indicators",
+      "description": "Retrieves a list of all indicators from BruteForceBlocker Feed.",
+      "title": "Fetch Indicators",
+      "parameters": [
+        {
+          "title": "Last Pull Time",
+          "description": "Last time the feeds were pulled",
+          "type": "text",
+          "name": "last_pull_time",
+          "required": false,
+          "editable": true,
+          "visible": true,
+          "tooltip": "Time when feeds where pulled",
+          "placeholder": "yyyy-mm-ddThh:mm:ss.SSSZ"
+        }
+      ],
+      "output_schema": [
+        {
+          "ip": "",
+          "last_reported": "",
+          "last_modified": "",
+          "expires": "",
+          "count": "",
+          "id": ""
+        }
+      ],
+      "enabled": true
+    }
+  ]
+}
