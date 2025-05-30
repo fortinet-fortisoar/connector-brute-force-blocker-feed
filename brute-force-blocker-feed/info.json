@@ -1,13 +1,13 @@
 {
   "name": "brute-force-blocker-feed",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "label": "BruteForceBlocker Feed",
   "category": "Threat Intelligence",
   "description": "BruteForceBlocker Feed it's main purpose is to block SSH bruteforce attacks via firewall.This connector facilitates automated operations related to fetching the list of IPs blocklist.<br/><br/>This connector has a dependency on the <a href=\"/content-hub/all-content/?contentType=solutionpack&amp;tag=ThreatIntelManagement\" target=\"_blank\" rel=\"noopener\">Threat Intel Management Solution Pack</a>. Install the Solution Pack before enabling ingestion of Threat Feeds from this source.",
   "publisher": "Fortinet",
   "cs_approved": true,
   "cs_compatible": true,
-  "help_online": "https://docs.fortinet.com/document/fortisoar/1.0.0/bruteforceblocker-feed/272/bruteforceblocker-feed-v1-0-0",
+  "help_online": "",
   "icon_small_name": "small.png",
   "icon_large_name": "large.png",
   "tags": [
@@ -22,6 +22,79 @@
       "threat_intel_feeds",
       "indicators"
     ]
+  },
+  "ingestion_config_schema": [
+    {
+      "title": "Ingestion Begin From",
+      "name": "last_pull_datetime",
+      "type": "datetime",
+      "tooltip": "Specify the Datetime after which you want to ingest feeds",
+      "required": true,
+      "editable": true,
+      "visible": true
+    },
+    {
+      "title": "Confidence",
+      "name": "confidence",
+      "type": "integer",
+      "tooltip": "Default Confidence score to be set for the feeds, in case the feed record doesn't have a confidence score",
+      "required": false,
+      "editable": true,
+      "visible": true,
+      "value": 50,
+      "validation": {
+        "minlength": 0,
+        "maxlength": 100
+      }
+    },
+    {
+      "title": "Reputation",
+      "name": "reputation",
+      "type": "select",
+      "tooltip": "Default Reputation to be set for the feeds",
+      "required": true,
+      "editable": true,
+      "visible": true,
+      "options": [
+        "Good",
+        "Suspicious",
+        "Malicious",
+        "No Reputation Available",
+        "TBD"
+      ],
+      "value": "Suspicious"
+    },
+    {
+      "title": "TLP",
+      "name": "tlp",
+      "type": "select",
+      "tooltip": "Default TLP to be set for the feeds",
+      "required": false,
+      "editable": true,
+      "visible": true,
+      "options": [
+        "Red",
+        "Amber",
+        "Green",
+        "White"
+      ],
+      "value": "White"
+    }
+  ],
+  "ingest_mapping_template": {
+    "tLP": "{% if vars.tlp %}{{ vars.tlp }}{% endif %}",
+    "value": "{{vars.ip}}",
+    "source": "BruteForceBlocker Feed",
+    "lastSeen": "{% if vars.last_reported %}{{ epoch_to_datetime(arrow.get(vars.last_reported).int_timestamp + (vars.last_reported | int)*24*60*60 )}}{% else %}None{% endif %}",
+    "modified": "{% if vars.last_modified %}{{ epoch_to_datetime(arrow.get(vars.last_modified).int_timestamp + (vars.last_modified | int)*24*60*60 )}}{% else %}None{% endif %}",
+    "sourceId": "{{vars.id}}",
+    "__replace": "",
+    "expiresOn": "{% if vars.expires %}{{ epoch_to_datetime(arrow.get(vars.expires).int_timestamp + (vars.expires | int)*24*60*60 )}}{% else %}None{% endif %}",
+    "confidence": "{% if vars.confidence %}{{ vars.confidence }}{% endif %}",
+    "reputation": "{% if vars.reputation %}{{ vars.reputation }}{% endif %}",
+    "sourceData": "{{vars | toJSON}}",
+    "typeOfFeed": "",
+    "validUntil": "{% if vars.expires %}{{ epoch_to_datetime(arrow.get(vars.expires).int_timestamp + (vars.expires | int)*24*60*60 )}}{% else %}None{% endif %}"
   },
   "configuration": {
     "fields": [
@@ -65,6 +138,36 @@
           "visible": true,
           "tooltip": "(Optional) Specify the time the feeds were last pulled from Brute Force Blocker Feed. In this case, the data will be returned from the Brute Force Blocker Feed only if the feed has been refreshed after the specified time.",
           "placeholder": "yyyy-mm-ddThh:mm:ss.SSSZ"
+        }
+      ],
+      "output_schema": [
+        {
+          "ip": "",
+          "last_reported": "",
+          "last_modified": "",
+          "expires": "",
+          "count": "",
+          "id": ""
+        }
+      ],
+      "enabled": true
+    },
+    {
+      "operation": "download_indicators",
+      "category": "investigation",
+      "annotation": "download_indicators",
+      "description": "Retrieves a list of all indicators from BruteForceBlocker Feed. You can also filter the indicators retrieved from Brute Force Blocker Feed based on the last pull time you have specified.",
+      "title": "Download Indicators",
+      "parameters": [
+        {
+          "title": "Last Pull Time",
+          "description": "(Optional) Specify the time the feeds were last pulled from Brute Force Blocker Feed. In this case, the data will be returned from the Brute Force Blocker Feed only if the feed has been refreshed after the specified time.",
+          "type": "datetime",
+          "name": "last_pull_time",
+          "required": false,
+          "editable": true,
+          "visible": true,
+          "tooltip": "(Optional) Specify the time the feeds were last pulled from Brute Force Blocker Feed. In this case, the data will be returned from the Brute Force Blocker Feed only if the feed has been refreshed after the specified time."
         }
       ],
       "output_schema": [

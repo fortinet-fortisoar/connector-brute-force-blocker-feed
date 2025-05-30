@@ -3,7 +3,7 @@
   "data": [
     {
       "@type": "WorkflowCollection",
-      "name": "Sample - BruteForceBlocker Feed - 1.0.0",
+      "name": "Sample - BruteForceBlocker Feed - 1.1.0",
       "description": "Sample playbooks for \"BruteForceBlocker Feed\" connector. If you are planning to use any of the sample playbooks in your environment, ensure that you clone those playbooks and move them to a different collection, since the sample playbook collection gets deleted during connector upgrade and delete.",
       "visible": true,
       "image": "/api/3/images/f2a410df-1a78-416d-8083-77dc88726ab3",
