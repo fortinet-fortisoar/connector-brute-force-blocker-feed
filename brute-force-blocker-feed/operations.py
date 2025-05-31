@@ -13,6 +13,7 @@ from datetime import datetime
 
 from connectors.core.connector import get_logger, ConnectorError
 from django.conf import settings
+from connectors.cyops_utilities.files import get_ingestion_base_dir
 
 logger = get_logger('brute-force-blocker-feed')
 
@@ -57,35 +58,6 @@ class BruteForceBlockerFeed(object):
         except Exception as err:
             raise ConnectorError(str(err))
 
-
-def get_ingestion_base_dir(**kwargs):
-    tenant_id = ''
-    request = kwargs.get("request")
-
-    if request and hasattr(request, 'tenantid'):
-        tenant_id = request.tenantid
-
-    base_indicator_dir = '/tmp/'  # default
-
-    try:
-        if hasattr(settings, 'ALL_CONFIG') and settings.ALL_CONFIG:
-            app_config = settings.ALL_CONFIG.get('application', {})
-            if isinstance(app_config, dict):
-                configured_dir = app_config.get('tenant_pv_base_dir', '/tmp/')
-                if '{tenant_id}' in configured_dir and tenant_id:
-                    base_indicator_dir = configured_dir.format(tenant_id=tenant_id)
-                else:
-                    base_indicator_dir = configured_dir
-    except Exception as e:
-        logger.warning(f"Error accessing settings.ALL_CONFIG: {e}")
-        base_indicator_dir = '/tmp/'
-
-    try:
-        os.makedirs(base_indicator_dir, exist_ok=True)
-    except Exception as e:
-        logger.warning(f"Could not create directory {base_indicator_dir}: {e}")
-        base_indicator_dir = '/tmp/'
-    return base_indicator_dir
 
 
 def convert_datetime_to_epoch(date_time):
