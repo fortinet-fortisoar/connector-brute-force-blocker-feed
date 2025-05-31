@@ -12,7 +12,6 @@ import uuid
 from datetime import datetime
 
 from connectors.core.connector import get_logger, ConnectorError
-from django.conf import settings
 from connectors.cyops_utilities.files import get_ingestion_base_dir
 
 logger = get_logger('brute-force-blocker-feed')
