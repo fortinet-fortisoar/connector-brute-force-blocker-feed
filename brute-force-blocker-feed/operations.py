@@ -1,11 +1,18 @@
-""" Copyright start
-  Copyright (C) 2008 - 2022 Fortinet Inc.
-  All rights reserved.
-  FORTINET CONFIDENTIAL & FORTINET PROPRIETARY SOURCE CODE
-  Copyright end """
+"""
+Copyright start
+MIT License
+Copyright (c) 2025 Fortinet Inc
+Copyright end
+"""
 
-import requests, datetime, time
+import requests, time, json
+import os.path
+import uuid
+
+from datetime import datetime
+
 from connectors.core.connector import get_logger, ConnectorError
+from connectors.cyops_utilities.files import get_ingestion_base_dir
 
 logger = get_logger('brute-force-blocker-feed')
 
@@ -51,9 +58,10 @@ class BruteForceBlockerFeed(object):
             raise ConnectorError(str(err))
 
 
+
 def convert_datetime_to_epoch(date_time):
     d1 = time.strptime(date_time, "%Y-%m-%dT%H:%M:%S.%fZ")
-    epoch = datetime.datetime.fromtimestamp(time.mktime(d1)).strftime('%s')
+    epoch = datetime.fromtimestamp(time.mktime(d1)).strftime('%s')
     return epoch
 
 
@@ -91,11 +99,49 @@ def fetch_indicators(config, params, **kwargs):
             return ips_list
 
 
+def download_indicators(config, params, **kwargs):
+    sf = BruteForceBlockerFeed(config)
+    config_id = config.get('config_id')
+    endpoint = ""
+    last_pull_time = params.get('last_pull_time')
+    response = sf.make_rest_call(endpoint, 'GET')
+    if response:
+        ip_blocklist = str(response).split("\\n")
+        last_modified_datetime = ip_blocklist[0].replace("\\t", " ").split(" ")[5].split(":")[1]
+        if last_pull_time:
+            last_pull_time = int(convert_datetime_to_epoch(last_pull_time))
+            if int(last_modified_datetime) > last_pull_time:
+                ips_list = find_indicators(ip_blocklist, last_modified_datetime)
+            else:
+                ips_list = []
+        else:
+            ips_list = find_indicators(ip_blocklist, last_modified_datetime)
+        base_indicator_dir = get_ingestion_base_dir(**kwargs)
+        try:
+            os.makedirs(base_indicator_dir, exist_ok=True)
+        except Exception as e:
+            base_indicator_dir = '/tmp/'
+            logger.warn("Not able to create dir for downloading indicators")
+
+        config_dir = base_indicator_dir + config_id + '/'
+        try:
+            os.makedirs(config_dir, exist_ok=True)
+        except Exception as e:
+            pass
+        file_name = str(uuid.uuid4()) + '.json'
+        file_path = os.path.join(config_dir, file_name)
+        with open(file_path, "w") as json_file:
+            json.dump(ips_list, json_file, indent=2)
+
+        return {"files": [file_path.replace(base_indicator_dir, '')], "last_pull_datetime": datetime.now()}
+
+
 def _check_health(config):
     sf = BruteForceBlockerFeed(config)
     return True
 
 
 operations = {
-    'fetch_indicators': fetch_indicators
+    'fetch_indicators': fetch_indicators,
+    'download_indicators': download_indicators
 }
